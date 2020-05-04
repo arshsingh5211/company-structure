@@ -1,103 +1,122 @@
-# Module 2 Project - Fraction Calculator
+# CompanyStructure
+Module 3 Project for Microsoft: DEV277x Object Oriented Programming in Java in EDX. April 2020
 
-This project is designed to help you practice building your own object class and testing it with a client class. You will be creating two classes, one called Fraction and the other called FractionCalculator. The Fraction class is an object that holds information about a fraction (numerator and denominator). It will have several constructors and both private and public methods implementing the behavior of a fraction. The FractionCalculator class is a class that will allow the user to enter in fractions and operations, calculating and displaying the result. It will run until the user tells it to quit. When this program is complete, you won’t have to second guess your fraction arithmetic ever again!
+For this project you are going to practice using inheritance, interfaces and abstract classes to relate objects to one another. The following is a description of each class and its behavior. It is up to you to decide which classes should extend, implement or abstract which pieces to maximize your code sharing.
 
-## Part 1 - Fraction Class
-Create a new class called "Fraction" and include the following:
+Create an object ecosystem that includes each of the following classes:
 
-### Fields
- -two private instance variables to hold the numerator and denominator as ints
- 
- 
-##### Constructors
-a two parameter constructor that initializes the numerator and denominator
+## Employee
+public Employee(String name, double baseSalary)
+Should construct a new employee object and take in two parameters, one for the name of the user and one for their base salary 
 
-This constructor should throw an IllegalArgumentException if the denominator is zero
+public double getBaseSalary() Should return the employee's current salary 
 
-If the user enters a negative denominator bump the negative sign to the numerator. For example, -3/-2 should be converted to 3/2. Likewise, 5/-3 should be converted to -5/3
+public String getName() 
+Should return the employee's current name public int getEmployeeID() Should return the employee's ID. The ID should be issued on behalf of the employee at the time they are constructed. The first ever employee should have an ID of "1", the second "2" and so on 
 
-example: Fraction myFrac = new Fraction(4,5); creates a fraction who's numerator is 4 and denominator is 5
-one parameter constructor that initializes the object equal in value to the integer parameter.
+public Employee getManager() Should return a reference to the Employee object that represents this employee's manager 
 
-example: Fraction myFrac = new Fraction(3) would create a Fraction with numerator equal to 3 and denominator equal to 1.
+public boolean equals(Employee other) Should return true if the two employee IDs are the same, false otherwise 
 
-zero parameter constructor that initializes the object to 0, meaning the numerator is 0 and the denominator is 1
-example: Fraction myFrac = new Fraction(); would create a fraction who's decimal value is 0
+public String toString() Should return a String representation of the employee that is a combination of their id followed by their name. Example: "1 Kasey" 
 
-You should eliminate as much redundancy as possible by letting your constructors rely on one another using the "this" keyword.
+public String employeeStatus() Should return a String representation of that Employee's current status. This will be different for every subclass of Employee
 
-### Methods
+## TechnicalEmployee
+public TechnicalEmployee(String name) Has a default base salary of 75000 
 
-getNumerator(): 	exposes the value of the numerator field to the user
+public String employeeStatus() Should return a String representation of this TechnicalEmployee that includes their ID, name and how many successful check ins they have had. Example: "1 Kasey has 10 successful check ins" 
 
-getDenominator():	exposes the value of the denominator field to the user
+## BusinessEmployee 
+public BusinessEmployee(String name) Has a default salary of 50000 
 
-toString():         "numerator/denominator", a String representation of the Fraction
+public double getBonusBudget() Should establish a running tally of the remaining bonusBudget for the team this employee supports. How that budget is determined will depend on which type of Business Employee it is 
 
-toDouble():         the result of numerator / denominator
+public String employeeStatus() Should return a String representation of this BusinessEmployee that includes their ID, name and the size of their currently managed budget. Example: "1 Kasey with a budget of 22500.0"
 
-add():  			returns a new Fraction that is the sum of other and this fractions
+## SoftwareEngineer
+public SoftwareEngineer(String name) Should start without access to code and with 0 code check ins 
 
-subtract():			returns a new Fraction that is the difference between the other and this fraction
+public boolean getCodeAccess() Should return whether or not this SoftwareEngineer has access to make changes to the code base 
 
-multiply():			returns a new Fraction that is the product of the other and this fraction
+public void setCodeAccess(boolean access) Should allow an external piece of code to update the SoftwareEngieer's code privileges to either true or false 
 
-divide():			returns a new Fraction that is the division of the other and this fraction, throw an 					IllegalArgumentException() if the user asks you to divide by 0
+public int getSuccessfulCheckIns() Should return the current count of how many times this SoftwareEngineer has successfully checked in code 
 
-equals():			boolean	must take in an "Object" to properly override the Object class's equals method, but 					should ultimately check if two fractions are equal
+public boolean checkInCode() Should check if this SoftwareEngineer's manager approves of their check in. If the check in is approved their successful checkin count should be increased and the method should return "true". If the manager does not approve the check in the SoftwareEngineer's code access should be changed to false and the method should return "false"
 
-toLowestTerms():	converts the current fraction to the lowest terms
+## Accountant
+public Accountant(String name) Should start with a bonus budget of 0 and no team they are officially supporting 
 
-gcd():				int	takes in two ints and determines the greatest common divisor of the two ints, should be 					a static method
+public TechnicalLead getTeamSupported() 
+Should return a reference to the TechnicalLead that this Accountant is currently supporting. If they have not been assigned a TechnicalLead null should be returned 
 
-equals()
-Override the Object equals() method so that it accurately determines whether or not two fractions are equal. In order to have it override, it has to take an Object as a parameter. Your method should check whether or not the parameter is an instanceof Fraction, since if it is not a Fraction it cannot be equal. Don’t forget to cast the parameter to a Fraction after you check if it is an Object of type Fraction so that you can access its variables. Two fractions are equal if they represent the same number (i.e. 3/6 = 1/2 and -2/3 = 2/-3).
+public void supportTeam(TechnicalLead lead) 
+Should allow a reference to a TechnicalLead to be passed in and saved. Once this happens the Accountant's bonus budget should be updated to be the total of each SoftwareEngineer's base salary that reports to that TechnicalLead plus 10%. For example, if the TechnicalLead supports 2 SoftwareEngineers, each with a salary of 75000, the Accountant's budget should be 150000 + 15000 for a total of 165000 
 
-toLowestTerms()
-To convert a fraction to lowest terms we have to determine the greatest common divisor (factor) between the numerator and denominator. The greatest common divisor of two numbers a and b, is the largest number that evenly divides both a and b.
+public boolean approveBonus(double bonus) Should take in a suggested bonus amount and check if there is still enough room in the budget. If the bonus is greater than the remaining budget, false should be returned, otherwise true. If the accountant is not supporting any team false should be returned. 
 
-The Euclidean Algorithm is a fast method for determining the GCD of two numbers. Here is pseudocode for its implementation:
+public String employeeStatus() Should return a String representation of this Accountant that includes their ID, name, the size of their currently managed budget and the name of the TechnicalLead they are currently supporting. Example: "1 Kasey with a budget of 22500.0 is supporting Satya Nadella"
 
-while a and b are not zero
-    find the remainder of a divided by b
-    set a to b
-    set b to the remainder you found
-return a
+## TechnicalLead
+public TechnicalLead(String name) Should create a new TechnicalLead that is a Manager. The TechnicalLead's base salary should be 1.3 times that of a TechnicalEmployee. TechnicalLeads should have a default head count of 4. 
+
+public boolean hasHeadCount() Should return true if the number of direct reports this manager has is less than their headcount. 
+
+public boolean addReport(SoftwareEngineer e) Should accept the reference to a SoftwareEngineer object, and if the TechnicalLead has head count left should add this employee to their list of direct reports. If the employee is successfully added to the TechnicalLead's direct reports true should be returned, false should be returned otherwise 
+
+public boolean approveCheckIn(SoftwareEngineer e) Should see if the employee passed in does report to this manager and if their code access is currently set to "true". If both those things are true, true is returned, otherwise false is returned 
+
+public boolean requestBonus(Employee e, double bonus) Should check if the bonus amount requested would be approved by the BusinessLead supporting this TechnicalLead. If it is, that employee should get that bonus and true should be returned. False should be returned otherwise 
+
+public String getTeamStatus() Should return a String that gives insight into this Manager and all their direct reports. It should return a string that is a combination of the TechnicalLead's employee status followed by each of their direct employee's status on subsequent lines. If the TechnicalLead has no reports it should print their employee status followed by the text " and no direct reports yet ". Example: "10 Kasey has 5 successful check ins and no direct reports yet". If the TechnicalLead does have reports it might look something like "10 Kasey has 5 successful check ins and is managing: /n 5 Niky has 2 successful check ins"
+
+## BusinessLead
+public BusinessLead(String name) Should create a new BusinessLead that is a Manager. The BusinessLead's base salary should be twice that of an Accountant. They should start with a head count of 10. 
+
+public boolean hasHeadCount() Should return true if the number of direct reports this manager has is less than their headcount. 
+
+public boolean addReport(Accountant e, TechnicalLead supportTeam) 
+Should accept the reference to an Accountant object, and if the BusinessLead has head count left should add this employee to their list of direct reports. If the employee is successfully added to the BusinessLead's direct reports true should be returned, false should be returned otherwise. Each time a report is added the BusinessLead's bonus budget should be increased by 1.1 times that new employee's base salary. That employee's team they are supporting should be updated to reflect the reference to the TechnicalLead given. If the employee is successfully added true should be returned, false otherwise. 
+
+public boolean requestBonus(Employee e, double bonus) Should check if the bonus amount requested would fit in current BusinessLead's budget. If it is, that employee should get that bonus, the BusinessLeader's budget should be deducted and true should be returned. False should be returned otherwise 
+
+public boolean approveBonus(Employee e, double bonus) This function should look through the Accountants the BusinessLead manages, and if any of them are supporting a the TechnicalLead that is the manager of the Employee passed in then the Accountant's budget should be consulted to see if the bonus could be afforded. If the team can afford the bonus it should be rewarded and true returned, false otherwise
+
+---------------------------------------------------------------------------------------------------------------
+
+Here is my testing code that you can use to see if things are set up properly: 
 
 
-
-## Part 2 – FractionCalculator Class
-In this section, you will implement a FractionCalculator class that has a main method and three helper methods. 
-
-Methods
-
-getOperation():			Asks the user to enter in a valid mathematical operation. If the 						user enters anything except "+", "-", "/", "*", "=", "q", or "Q" it 						should re-prompt them until there is valid input.
+	public class CompanyStructure { 
 	
-validFraction():		boolean	returns true if the parameter is in the form "a/b" where a is any int and b is 						any positive int
+	public static void main(String[] args) { 
 
-getFraction():			It prompts the user for a String that is a validFraction. If they enter any thing that 						is not a valid Fraction, it should re-prompt them until it is valid
-
-
-getOperation()
-Here is example output from a call to getOperation(): get fraction method At the end of this run, getOperation would have returned “*”.
-
-validFraction()
-Some things to be mindful of when implementing the validFraction() method:
-
-The first character may or may not be a "-" character. If a negative shows up anywhere else, then it is not a valid fraction. It may be helpful to remove the "-" character if there is one.
-If there is no "/" character, then every character in the string must be a number (if you removed the "-" sign).
-If there is a "/" character, then it may be helpful to create substrings for the numerator and denominator.
-Both substrings must be non-empty.
-Both must be entirely made of numbers.
-The denominator cannot be "0".
-Hint 1: It may be useful to create a helper method isNumber() that takes a String as input and returns true if every character in the String is a number 0-9 and false otherwise. This method can also check for empty strings. Hint 2: Once you determine whether or not the Strings are numbers, you may find the Integer.parseInt() method helpful.
-
-getFraction()
-If the user enters any thing that is not a valid Fraction, it should re-prompt them until it is valid. No user input should throw an exception! If you are getting exceptions, then it is likely your validFraction method isn’t correct.
-
-## Part 3 - Putting it all together!
-Write a short introduction method that describes the calculator program and welcomes your user
-Ask the user to enter in an operation
-As long as the user enters something that’s not "q" or "Q" when asked for an operation you should run the calculator
-Get two fractions from the user and then perform whichever operation they ask for
-Print the result of the operation
+		TechnicalLead CTO = new TechnicalLead("Satya Nadella"); 
+		SoftwareEngineer seA = new SoftwareEngineer("Kasey"); 
+		SoftwareEngineer seB = new SoftwareEngineer("Breana"); 
+		SoftwareEngineer seC = new SoftwareEngineer("Eric"); 
+		CTO.addReport(seA); 
+		CTO.addReport(seB); 
+		CTO.addReport(seC); 
+		System.out.println(CTO.getTeamStatus());
+	
+	    TechnicalLead VPofENG = new TechnicalLead("Bill Gates");
+	    SoftwarEngineer seD = new SoftwareEngineer("Winter");
+	    SoftwareEngineer seE = new SoftwareEngineer("Libby");
+	    SoftwareEngineer seF = new SoftwareEngineer("Gizan");
+	    SoftwareEngineer seG = new SoftwareEngineer("Zaynah");
+	    VPofENG.addReport(seD);
+	    VPofENG.addReport(seE);
+	    VPofENG.addReport(seF);
+	    VPofENG.addReport(seG);
+	    System.out.println(VPofENG.getTeamStatus());
+	
+	    BusinessLead CFO = new BusinessLead("Amy Hood");
+	    Accountant actA = new Accountant("Niky");
+	    Accountant actB = new Accountant("Andrew");
+	    CFO.addReport(actA, CTO);
+	    CFO.addReport(actB, VPofENG);
+	    System.out.println(CFO.getTeamStatus());
+		}
+	}
